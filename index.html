@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+   <title>Larissa & Eleno · Nuestra Boda</title>
+   
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   
+   <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+   <div id="toast" class="toast">¡Información copiada! 📋✨</div>
+
+   <!-- CANVAS DE EXPLOSIÓN DE PÉTALOS BLANCOS -->
+   <canvas id="petalsCanvas"></canvas>
+
+ <!-- MÚSICA DE FONDO -->
+<audio id="musicaInvitacion" preload="auto" loop>
+   <source src="img/musica.mp3" type="audio/mpeg">
+</audio>
+
+<div id="music-toggle" class="music-btn" onclick="toggleMusic()">
+       <i class="fa-solid fa-music"></i>
+   </div>
+   
+   <!-- INTRO VIDEO DEL SOBRE -->
+   <div id="contenedor-principal" onclick="activarInvitacion()">
+       <video id="videoSobre" playsinline muted preload="auto" poster="img/sobre.png">
+           <source src="img/1.mp4" type="video/mp4">
+       </video>
+       <div id="capa-boton">
+           <div class="boton-rosa-inicio" id="btn-toca-abrir">TOCÁ EL SOBRE PARA ABRIR </div>
+       </div>
+   </div>
+
+   <!-- INVITACIÓN WEB EDITORIAL -->
+   <div id="seccion-final" class="oculto">
+
+       <div class="bloque-papel-textura">
+           
+           <!-- PORTADA PREMIUM EN ARCO CON NOMBRES SUPERPUESTOS -->
+           <header class="hero-portada reveal">
+               <div class="portada-frame-inner">
+                   <img src="img/Portada.png" onerror="this.src='https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=80'" alt="Larissa y Eleno" class="portada-img">
+                   <div class="portada-overlay">
+                       <h1 class="main-title-portada">Larissa & Eleno</h1>
+                       <p class="title-sub-portada">NUESTRA BODA</p>
+                   </div>
+               </div>
+           </header>
+
+           <!-- SAVE THE DATE PRO: 3 CÍRCULOS DE RASPADITA + CALENDAR + CONTADOR -->
+           <section class="section-pad reveal text-center" id="std-section">
+               <h2 class="editorial-heading mt-10">SAVE THE DATE</h2>
+               <p class="section-sub-label">Raspá cada círculo para descubrir la fecha</p>
+
+               <!-- 3 CÍRCULOS PARA RASPAR -->
+               <div class="scratch-circles-wrapper mt-25" id="circlesWrapper">
+                   <!-- CÍRCULO DÍA -->
+                   <div class="circle-scratch-card">
+                       <div class="circle-reveal-content">
+                           <span class="circle-number">19</span>
+                           <span class="circle-label">DÍA</span>
+                       </div>
+                       <canvas class="circle-canvas" data-index="0" data-label="DÍA"></canvas>
+                   </div>
+
+                   <!-- CÍRCULO MES -->
+                   <div class="circle-scratch-card">
+                       <div class="circle-reveal-content">
+                           <span class="circle-number">12</span>
+                           <span class="circle-label">MES</span>
+                       </div>
+                       <canvas class="circle-canvas" data-index="1" data-label="MES"></canvas>
+                   </div>
+
+                   <!-- CÍRCULO AÑO -->
+                   <div class="circle-scratch-card">
+                       <div class="circle-reveal-content">
+                           <span class="circle-number">2026</span>
+                           <span class="circle-label">AÑO</span>
+                       </div>
+                       <canvas class="circle-canvas" data-index="2" data-label="AÑO"></canvas>
+                   </div>
+               </div>
+
+               <!-- BOTÓN GOOGLE CALENDAR -->
+               <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+Larissa+y+Eleno&dates=20261219T203000Z/20261220T050000Z&location=Capiata,+Paraguay" target="_blank" class="btn btn-editorial mt-25">
+                   <i class="fa-regular fa-calendar-plus"></i> AGREGAR A GOOGLE CALENDAR
+               </a>
+
+               <!-- CONTADOR REGRESIVO DESLIZANTE -->
+               <div class="countdown-card" id="countdownCard">
+                   <p class="countdown-title">FALTAN POCOS DÍAS</p>
+                   <div class="countdown-boxes">
+                       <div class="cd-box"><span id="cd-days">00</span><p>Días</p></div>
+                       <div class="cd-sep">:</div>
+                       <div class="cd-box"><span id="cd-hours">00</span><p>Hs</p></div>
+                       <div class="cd-sep">:</div>
+                       <div class="cd-box"><span id="cd-mins">00</span><p>Min</p></div>
+                       <div class="cd-sep">:</div>
+                       <div class="cd-box"><span id="cd-secs">00</span><p>Seg</p></div>
+                   </div>
+               </div>
+           </section>
+
+           <!-- BENDICIÓN Y PADRES (2 CONTENEDORES SEPARADOS) -->
+           <section class="section-pad reveal">
+               <!-- Contenedor 1: Padres -->
+               <div class="invitarte-card parents-block-card">
+                   <p class="blessing-text">Con la bendición de Dios y el amor de nuestras familias,</p>
+                   
+                   <div class="parents-container mt-20">
+                       <div class="parent-col">
+                           <p class="parent-role">PADRES DE LA NOVIA</p>
+                           <p class="parent-names">Irma Beatriz Caballero de Lobos<br>& Juan Augusto Lobos Ruiz Díaz</p>
+                       </div>
+                       <div class="parents-divider"></div>
+                       <div class="parent-col">
+                           <p class="parent-role">PADRES DEL NOVIO</p>
+                           <p class="parent-names">Efigenia Riveros (+)<br>& Cipriano Vázquez González (+)</p>
+                       </div>
+                   </div>
+                   <p class="memory-subtitle mt-20">Quienes nos acompañan desde el cielo</p>
+               </div>
+
+               <!-- Contenedor 2: Versículo y Novios -->
+               <div class="invitarte-card verse-block-card mt-20">
+                   <div class="verse-couple-block">
+                       <p class="verse-quote-text">
+                           “Por eso dejará el hombre a su padre y a su madre, y se unirá a su mujer, y serán una sola carne.”
+                       </p>
+                       <span class="verse-ref">Génesis 2:24</span>
+                       <p class="celebran-text mt-20">celebran con nosotros la unión de</p>
+                       <h3 class="couple-names-block">Larissa & Eleno</h3>
+                   </div>
+               </div>
+           </section>
+
+           <!-- GALERÍA DESLIZANTE (FOTO 5 REMOVIDA PARA POLAROID) -->
+           <section class="section-pad reveal">
+               <h2 class="editorial-heading">NUESTROS MOMENTOS</h2>
+               <p class="title-sub-cursive">Deslizá para ver las fotos</p>
+
+               <div class="gallery-slider-wrapper mt-20">
+                   <div class="gallery-slider" id="gallerySlider">
+                       <div class="slide-item"><img src="img/foto1.png" alt="Foto 1"></div>
+                       <div class="slide-item"><img src="img/foto2.png" alt="Foto 2"></div>
+                       <div class="slide-item"><img src="img/foto3.png" alt="Foto 3"></div>
+                       <div class="slide-item"><img src="img/foto4.png" alt="Foto 4"></div>
+                       <div class="slide-item"><img src="img/foto6.png" alt="Foto 6"></div>
+                       <div class="slide-item"><img src="img/foto7.png" alt="Foto 7"></div>
+                       <div class="slide-item"><img src="img/foto8.png" alt="Foto 8"></div>
+                   </div>
+                   <div class="slider-hint mt-10">
+                       <i class="fa-solid fa-arrow-left-long"></i> Deslizá <i class="fa-solid fa-arrow-right-long"></i>
+                   </div>
+               </div>
+           </section>
+
+           <!-- UBICACIONES ACTUALIZADAS -->
+           <section class="section-pad location-section-spacious reveal">
+               <h2 class="editorial-heading">UBICACIONES</h2>
+               <p class="title-sub-cursive">Dónde celebramos</p>
+
+               <div class="venue-card-watercolor mt-25">
+                   <div class="venue-icon-wrap"><i class="fa-solid fa-church"></i></div>
+                   <h3 class="venue-title">CEREMONIA RELIGIOSA</h3>
+                   <p class="venue-desc">Parroquia Virgen del Pilar - Capiatá</p>
+                   <div class="btn-group-center mt-15">
+                       <a href="https://maps.app.goo.gl/h5PUgkfMYg21tV337?g_st=aw" target="_blank" class="btn btn-outline-dark"><i class="fa-solid fa-location-dot"></i> Google Maps</a>
+                   </div>
+               </div>
+
+               <div class="venue-card-watercolor mt-35">
+                   <div class="venue-icon-wrap"><i class="fa-solid fa-wine-glass"></i></div>
+                   <h3 class="venue-title">CEREMONIA CIVIL</h3>
+                   <p class="venue-desc">Quinta La Familia</p>
+                   <div class="btn-group-center mt-15">
+                       <a href="https://maps.app.goo.gl/PM3yc1xDBSGnmfFHA?g_st=aw" target="_blank" class="btn btn-outline-dark"><i class="fa-solid fa-location-dot"></i> Google Maps</a>
+                   </div>
+               </div>
+           </section>
+       </div>
+
+       <!-- CRONOGRAMA EN VINO (CON HORARIOS E ICONOS FONTEX) -->
+       <div class="bloque-vino">
+           <section class="section-pad reveal text-center">
+               
+               <div class="itinerary-deco-wrap">
+                   <img src="img/flores-calas.png" onerror="this.style.display='none'" class="deco-flower" alt="Flor">
+                   <div class="deco-polaroid">
+                       <img src="img/foto5.png" alt="Novios Cronograma">
+                   </div>
+                   <img src="img/sello-cera.png" onerror="this.style.display='none'" class="deco-seal" alt="Sello">
+               </div>
+
+               <h2 class="editorial-heading-light mt-20">CRONOGRAMA</h2>
+               <p class="title-sub-cursive-light">Momentos de la Boda</p>
+
+               <div class="program-timeline-icons mt-30">
+                   <div class="program-card">
+                       <div class="icon-circle"><i class="fa-solid fa-church"></i></div>
+                       <div class="program-info">
+                           <span class="p-time">20:30 HS</span>
+                           <h4 class="p-title">Ceremonia Religiosa</h4>
+                       </div>
+                   </div>
+
+                   <div class="program-card">
+                       <div class="icon-circle"><i class="fa-solid fa-glass-cheers"></i></div>
+                       <div class="program-info">
+                           <span class="p-time">21:00 HS</span>
+                           <h4 class="p-title">Recepción</h4>
+                       </div>
+                   </div>
+
+                   <div class="program-card">
+                       <div class="icon-circle"><i class="fa-solid fa-ring"></i></div>
+                       <div class="program-info">
+                           <span class="p-time">22:00 HS</span>
+                           <h4 class="p-title">Ceremonia Civil</h4>
+                       </div>
+                   </div>
+
+                   <div class="program-card">
+                       <div class="icon-circle"><i class="fa-solid fa-utensils"></i></div>
+                       <div class="program-info">
+                           <span class="p-time">22:30 HS</span>
+                           <h4 class="p-title">Cena</h4>
+                       </div>
+                   </div>
+
+                   <div class="program-card">
+                       <div class="icon-circle"><i class="fa-solid fa-champagne-glasses"></i></div>
+                       <div class="program-info">
+                           <span class="p-time">23:00 HS</span>
+                           <h4 class="p-title">Brindis y momentos especiales</h4>
+                       </div>
+                   </div>
+
+                   <div class="program-card">
+                       <div class="icon-circle"><i class="fa-solid fa-music"></i></div>
+                       <div class="program-info">
+                           <span class="p-time">00:00 HS</span>
+                           <h4 class="p-title">Fiesta</h4>
+                       </div>
+                   </div>
+               </div>
+           </section>
+       </div>
+
+       <!-- DRESS CODE Y FAQ INTERACTIVO (4 PREGUNTAS) -->
+       <div class="bloque-papel-textura">
+           <!-- DRESS CODE -->
+           <section class="section-pad reveal">
+               <div class="dress-img-head mt-10">
+                   <img src="img/vestimenta.png" onerror="this.style.display='none'" alt="Dress Code" class="vestimenta-png-icon">
+               </div>
+               <h2 class="editorial-heading mt-10">DRESS CODE</h2>
+               <p class="title-sub-cursive">Código de Vestimenta</p>
+
+               <p class="dress-code-subtitle mt-15">ELEGANTE</p>
+           </section>
+
+           <!-- FAQ INTERACTIVO (4 PREGUNTAS) -->
+           <section class="section-pad reveal text-center">
+               <h2 class="editorial-heading">FAQ INTERACTIVO</h2>
+               <p class="title-sub-cursive">Preguntas frecuentes</p>
+
+               <div class="faq-container mt-20">
+                   <div class="faq-item" onclick="toggleFaq(this)">
+                       <div class="faq-question">
+                           <span>¿Hay estacionamiento disponible?</span>
+                           <i class="fa-solid fa-chevron-down faq-arrow"></i>
+                       </div>
+                       <div class="faq-answer">
+                           <p>Sí, la Quinta La Familia cuenta con espacio de estacionamiento seguro para los invitados.</p>
+                       </div>
+                   </div>
+
+                   <div class="faq-item" onclick="toggleFaq(this)">
+                       <div class="faq-question">
+                           <span>¿A qué hora debo llegar?</span>
+                           <i class="fa-solid fa-chevron-down faq-arrow"></i>
+                       </div>
+                       <div class="faq-answer">
+                           <p>Les recomendamos llegar con 15–20 minutos de anticipación para ubicarse cómodamente antes de iniciar la ceremonia.</p>
+                       </div>
+                   </div>
+
+                   <div class="faq-item" onclick="toggleFaq(this)">
+                       <div class="faq-question">
+                           <span>¿Puedo asistir con niños?</span>
+                           <i class="fa-solid fa-chevron-down faq-arrow"></i>
+                       </div>
+                       <div class="faq-answer">
+                           <p>Amamos a los pequeños, pero hemos preparado una celebración especialmente para adultos.</p>
+                       </div>
+                   </div>
+
+                   <div class="faq-item" onclick="toggleFaq(this)">
+                       <div class="faq-question">
+                           <span>¿Puedo llevar acompañante?</span>
+                           <i class="fa-solid fa-chevron-down faq-arrow"></i>
+                       </div>
+                       <div class="faq-answer">
+                           <p>La invitación es personal. Si tu invitación incluye acompañante, estará indicado en la misma.</p>
+                       </div>
+                   </div>
+
+                   <div class="faq-item" onclick="toggleFaq(this)">
+                       <div class="faq-question">
+                           <span>¿Puedo tomar fotos durante la ceremonia?</span>
+                           <i class="fa-solid fa-chevron-down faq-arrow"></i>
+                       </div>
+                       <div class="faq-answer">
+                           <p>Queremos que disfruten plenamente este momento. Habrá un código QR disponible en las mesas para que puedan compartir con nosotros las fotos y videos de este día tan especial.</p>
+                       </div>
+                   </div>
+               </div>
+           </section>
+
+           <!-- SUGERENCIA DE REGALO CON TEXTO DE LUNA DE MIEL -->
+           <section class="section-pad reveal">
+               <div class="gift-envelope-card">
+                   <div class="gift-icon-wrap" onclick="toggleGiftModal()">
+                       <img src="img/regalo.png" onerror="this.style.display='none'" alt="Regalo" class="gift-regalo-img">
+                   </div>
+                   
+                   <h2 class="editorial-heading mt-15">SUGERENCIA DE REGALO</h2>
+                   <p class="title-sub-cursive">Un detalle con los novios</p>
+                   <p class="gift-text">
+                       Su presencia en este día tan especial es nuestra mayor bendición.<br><br>
+                       Si desean acompañarnos con un detalle, estaremos muy agradecidos de recibir su cariño para hacer realidad nuestro sueño de una hermosa luna de miel y crear nuevos recuerdos juntos.
+                   </p>
+                   <button type="button" class="btn btn-editorial mt-15" onclick="toggleGiftModal()">VER DATOS BANCARIOS</button>
+
+                   <div id="gift-modal" class="gift-modal-box hidden-element mt-15">
+                       <p><strong>Banco / Entidad:</strong> Cooperativa Coomecipar Ltda.</p>
+                       <p><strong>Titular:</strong> Larissa Lobos</p>
+                       <p><strong>Nro. de Cuenta:</strong> 1265860014</p>
+                       <p><strong>C.I.:</strong> 5029514</p>
+                       <p><strong>Alias / Celular:</strong> 0986898090</p>
+                       
+                       <button type="button" class="btn btn-sm btn-outline-dark mt-10" onclick="copyAlias()">
+                           <i class="fa-regular fa-copy"></i> Copiar Alias (0986898090)
+                       </button>
+                   </div>
+               </div>
+           </section>
+       </div>
+
+       <!-- CONFIRMACIÓN DE ASISTENCIA -->
+       <div class="bloque-vino">
+           <section class="section-pad reveal text-center">
+               <h2 class="editorial-heading-light">CONFIRMACIÓN DE ASISTENCIA</h2>
+               <p class="title-sub-cursive-light">Esperamos contar con vos</p>
+               
+
+               <a href="https://forms.gle/w6QDXrwpoybEWeVR6" class="btn btn-white-pill mt-25" target="_blank">
+                   <i class="fa-solid fa-check-to-slot"></i> CONFIRMAR ASISTENCIA AQUI
+               </a>
+           </section>
+       </div>
+
+       <!-- PLAYLIST Y MURO DE DESEOS -->
+       <div class="bloque-papel-textura">
+           <!-- PLAYLIST -->
+           <section class="section-pad reveal text-center">
+               <div class="playlist-card">
+                   <i class="fa-brands fa-spotify playlist-icon"></i>
+                   <h2 class="editorial-heading mt-10">MÚSICA & PLAYLIST</h2>
+                   <p class="title-sub-cursive">¿Qué canción no puede faltar?</p>
+                   <p class="gift-text">Queremos que la pista explote. ¡Sugerinos los temas que querés bailar!</p>
+
+                   <form id="song-form" onsubmit="sugerirCancion(event)" class="song-form mt-15">
+                       <input type="text" id="song-input" placeholder="Nombre de la canción y artista..." required class="input-editorial">
+                       <button type="submit" class="btn btn-editorial mt-10"><i class="fa-solid fa-paper-plane"></i> RECOMENDAR CANCIÓN</button>
+                   </form>
+               </div>
+           </section>
+
+           <!-- MURO DE DESEOS -->
+           <section class="section-pad reveal">
+               <div class="guestbook-card">
+                   <i class="fa-regular fa-heart guestbook-icon"></i>
+                   <h2 class="editorial-heading mt-10">MURO DE DESEOS</h2>
+                   <p class="title-sub-cursive">Dejá tu mensaje a los novios</p>
+                   <p class="gift-text">Tus palabras serán guardadas en nuestro libro de recuerdos inolvidables.</p>
+
+                   <form id="guestbook-form" onsubmit="guardarDeseo(event)" class="guestbook-form mt-20">
+                       <input type="text" id="gb-nombre" placeholder="Nombre y Apellido *" required class="input-editorial">
+                       <textarea id="gb-mensaje" rows="4" placeholder="Escribí tus buenos deseos para Larissa & Eleno..." required class="input-editorial textarea-editorial mt-10"></textarea>
+                       <button type="submit" class="btn btn-editorial mt-15"><i class="fa-solid fa-heart"></i> ENVIAR MI DESEO</button>
+                   </form>
+               </div>
+           </section>
+       </div>
+
+       <!-- CIERRE BÍBLICO Y FIRMA FINAL -->
+       <div class="bloque-vino">
+           <section class="section-pad reveal text-center">
+               <div class="bible-quote-box">
+                   <p class="bible-text">"Y sobre todas estas cosas, vístanse de amor, que es el vínculo perfecto."</p>
+                   <span class="bible-ref">Colosenses 3:14</span>
+               </div>
+
+               <div class="farewell-signature mt-35">
+                   <p class="farewell-with-love">Con cariño,</p>
+                   <h2 class="farewell-couple">Larissa & Eleno</h2>
+               </div>
+           </section>
+
+           <footer class="editorial-footer">
+               <p>© GHISA DIGITAL · DESIGN STUDIO</p>
+           </footer>
+       </div>
+
+   </div>
+
+   <script src="script.js"></script>
+</body>
+</html>
